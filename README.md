@@ -1,1 +1,0 @@
-# risky-image-detect-bundle
