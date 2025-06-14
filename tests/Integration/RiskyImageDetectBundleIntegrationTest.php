@@ -3,6 +3,9 @@
 namespace Tourze\RiskyImageDetectBundle\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Tourze\IntegrationTestKernel\IntegrationTestKernel;
+use Tourze\RiskyImageDetectBundle\RiskyImageDetectBundle;
 use Tourze\RiskyImageDetectBundle\Service\DefaultRiskyImageDetector;
 use Tourze\RiskyImageDetectBundle\Service\RiskyImageDetector;
 
@@ -32,5 +35,27 @@ class RiskyImageDetectBundleIntegrationTest extends TestCase
         $this->assertFalse($detector->isRiskyImage(''), '空字符串应返回false');
         $this->assertFalse($detector->isRiskyImage(str_repeat('a', 1000)), '长字符串应返回false');
         $this->assertFalse($detector->isRiskyImage('!@#$%^&*()'), '特殊字符应返回false');
+    }
+
+    protected static function getKernelClass(): string
+    {
+        return IntegrationTestKernel::class;
+    }
+
+    protected static function createKernel(array $options = []): IntegrationTestKernel
+    {
+        $appendBundles = [
+            FrameworkBundle::class => ['all' => true],
+            RiskyImageDetectBundle::class => ['all' => true],
+        ];
+        
+        $entityMappings = [];
+
+        return new IntegrationTestKernel(
+            $options['environment'] ?? 'test',
+            $options['debug'] ?? true,
+            $appendBundles,
+            $entityMappings
+        );
     }
 }
