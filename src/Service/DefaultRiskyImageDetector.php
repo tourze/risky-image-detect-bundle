@@ -4,7 +4,7 @@ namespace Tourze\RiskyImageDetectBundle\Service;
 
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 
-#[AsAlias(RiskyImageDetector::class)]
+#[AsAlias(id: RiskyImageDetector::class)]
 class DefaultRiskyImageDetector implements RiskyImageDetector
 {
     public function isRiskyImage(string $image): bool

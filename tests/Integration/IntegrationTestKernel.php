@@ -13,6 +13,8 @@ use Tourze\RiskyImageDetectBundle\RiskyImageDetectBundle;
  *
  * 注意：当前RiskyImageDetectBundle不需要复杂的容器配置，
  * 因此我们使用简化版测试内核。
+ *
+ * @internal
  */
 class IntegrationTestKernel extends Kernel
 {
