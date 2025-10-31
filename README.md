@@ -1,18 +1,34 @@
-# 风险图片检测 Bundle
+# Risky Image Detect Bundle
 
-这是一个Symfony Bundle，提供风险图片检测功能。
+[English](README.md) | [中文](README.zh-CN.md)
 
-## 安装
+[![Latest Version](https://img.shields.io/packagist/v/tourze/risky-image-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/risky-image-detect-bundle)
+[![PHP Version](https://img.shields.io/packagist/php-v/tourze/risky-image-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/risky-image-detect-bundle)
+[![Total Downloads](https://img.shields.io/packagist/dt/tourze/risky-image-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/risky-image-detect-bundle)
+[![License](https://img.shields.io/packagist/l/tourze/risky-image-detect-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/risky-image-detect-bundle)
+[![Coverage Status](https://img.shields.io/codecov/c/github/tourze/php-monorepo.svg?style=flat-square)](https://codecov.io/gh/tourze/php-monorepo)
 
-使用Composer安装此包：
+A Symfony Bundle for detecting risky image content, providing a secure image validation service.
+
+## Features
+
+- Simple and extensible interface for risky image detection
+- Default implementation ready to use out of the box
+- Easy to customize with your own detection logic
+- Fully compatible with Symfony 6.4+ and PHP 8.1+
+- Comprehensive test coverage
+
+## Installation
+
+Install this package using Composer:
 
 ```bash
 composer require tourze/risky-image-detect-bundle
 ```
 
-## 配置
+## Configuration
 
-在您的Symfony项目中启用此Bundle：
+Enable this bundle in your Symfony project:
 
 ```php
 // config/bundles.php
@@ -22,15 +38,16 @@ return [
 ];
 ```
 
-## 使用方法
+## Quick Start
 
-此Bundle提供了一个 `RiskyImageDetector` 接口及其默认实现 `DefaultRiskyImageDetector`，用于检测图片是否包含风险内容。
+This bundle provides a `RiskyImageDetector` interface and its default implementation `DefaultRiskyImageDetector` for detecting risky image content.
 
 ```php
-// 通过依赖注入使用
+<?php
+
 use Tourze\RiskyImageDetectBundle\Service\RiskyImageDetector;
 
-class YourService
+class ImageProcessingService
 {
     public function __construct(
         private readonly RiskyImageDetector $riskyImageDetector
@@ -40,17 +57,24 @@ class YourService
     public function processImage(string $imageData): void
     {
         if ($this->riskyImageDetector->isRiskyImage($imageData)) {
-            // 处理风险图片...
+            // Handle risky image...
+            throw new \Exception('Risky image detected');
         } else {
-            // 处理正常图片...
+            // Process normal image...
+            $this->processNormalImage($imageData);
         }
+    }
+    
+    private function processNormalImage(string $imageData): void
+    {
+        // Your image processing logic here
     }
 }
 ```
 
-## 自定义实现
+## Customization
 
-您可以创建自己的 `RiskyImageDetector` 实现，并使用Symfony的服务配置将其设置为默认实现：
+You can create your own `RiskyImageDetector` implementation and set it as the default using Symfony's service configuration:
 
 ```php
 // src/Service/CustomRiskyImageDetector.php
@@ -64,19 +88,33 @@ class CustomRiskyImageDetector implements RiskyImageDetector
 {
     public function isRiskyImage(string $image): bool
     {
-        // 您的自定义实现...
+        // Your custom implementation...
+        // For example, integrate with external API or use ML models
+        return $this->checkWithExternalService($image);
+    }
+    
+    private function checkWithExternalService(string $image): bool
+    {
+        // Implementation details...
+        return false;
     }
 }
 ```
 
-## 开发
+## Development
 
-运行测试：
+Run tests:
 
 ```bash
 ./vendor/bin/phpunit packages/risky-image-detect-bundle/tests
 ```
 
-## 许可证
+Run static analysis:
 
-本包基于MIT许可证发布。详情请参阅[LICENSE](LICENSE)文件。
+```bash
+php -d memory_limit=2G ./vendor/bin/phpstan analyse packages/risky-image-detect-bundle
+```
+
+## License
+
+This package is released under the MIT License. See [LICENSE](LICENSE) file for details.

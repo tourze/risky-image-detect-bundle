@@ -1,37 +1,26 @@
 <?php
 
-namespace Tourze\RiskyImageDetectBundle\Tests\DependencyInjection;
+namespace TourzeRiskyImageDetectBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Tourze\PHPUnitSymfonyUnitTest\AbstractDependencyInjectionExtensionTestCase;
 use Tourze\RiskyImageDetectBundle\DependencyInjection\RiskyImageDetectExtension;
 use Tourze\RiskyImageDetectBundle\Service\DefaultRiskyImageDetector;
 
-class RiskyImageDetectExtensionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(RiskyImageDetectExtension::class)]
+final class RiskyImageDetectExtensionTest extends AbstractDependencyInjectionExtensionTestCase
 {
-    /**
-     * 测试扩展是否正确注册服务
-     */
-    public function testLoad_registersServices(): void
-    {
-        $container = new ContainerBuilder();
-        $extension = new RiskyImageDetectExtension();
-
-        $extension->load([], $container);
-
-        $this->assertTrue($container->has(DefaultRiskyImageDetector::class), '容器应该包含DefaultRiskyImageDetector服务');
-
-        // 由于使用AsAlias属性，而不是通过容器定义别名，无法在测试中直接验证别名
-        // 这是因为别名是通过PHP属性定义的，在容器编译前不会被解析
-        // 我们可以在集成测试中验证这一点
-    }
-
     /**
      * 测试空配置时的服务加载
      */
-    public function testLoad_withEmptyConfiguration(): void
+    public function testLoadWithEmptyConfiguration(): void
     {
         $container = new ContainerBuilder();
+        $container->setParameter('kernel.environment', 'test');
         $extension = new RiskyImageDetectExtension();
 
         $extension->load([], $container);

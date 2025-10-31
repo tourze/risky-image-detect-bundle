@@ -1,46 +1,61 @@
 <?php
 
-namespace Tourze\RiskyImageDetectBundle\Tests\Service;
+namespace TourzeRiskyImageDetectBundle\Tests\Service;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractIntegrationTestCase;
 use Tourze\RiskyImageDetectBundle\Service\DefaultRiskyImageDetector;
 
-class DefaultRiskyImageDetectorTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(DefaultRiskyImageDetector::class)]
+#[RunTestsInSeparateProcesses]
+final class DefaultRiskyImageDetectorTest extends AbstractIntegrationTestCase
 {
+    /**
+     * 子类自定义初始化逻辑
+     */
+    protected function onSetUp(): void
+    {
+        // 集成测试不需要特殊初始化
+    }
+
     /**
      * 测试使用有效图片字符串时的行为
      */
-    public function testIsRiskyImage_withValidImageString(): void
+    public function testIsRiskyImageWithValidImageString(): void
     {
-        $detector = new DefaultRiskyImageDetector();
-        $this->assertFalse($detector->isRiskyImage('valid-image-data'));
+        $detector = self::getService(DefaultRiskyImageDetector::class);
+        self::assertFalse($detector->isRiskyImage('valid-image-data'));
     }
 
     /**
      * 测试使用空字符串时的行为
      */
-    public function testIsRiskyImage_withEmptyString(): void
+    public function testIsRiskyImageWithEmptyString(): void
     {
-        $detector = new DefaultRiskyImageDetector();
-        $this->assertFalse($detector->isRiskyImage(''));
+        $detector = self::getService(DefaultRiskyImageDetector::class);
+        self::assertFalse($detector->isRiskyImage(''));
     }
 
     /**
      * 测试使用特殊字符时的行为
      */
-    public function testIsRiskyImage_withSpecialCharacters(): void
+    public function testIsRiskyImageWithSpecialCharacters(): void
     {
-        $detector = new DefaultRiskyImageDetector();
-        $this->assertFalse($detector->isRiskyImage('!@#$%^&*()_+'));
+        $detector = self::getService(DefaultRiskyImageDetector::class);
+        self::assertFalse($detector->isRiskyImage('!@#$%^&*()_+'));
     }
 
     /**
      * 测试使用非常长的字符串时的行为
      */
-    public function testIsRiskyImage_withLongString(): void
+    public function testIsRiskyImageWithLongString(): void
     {
-        $detector = new DefaultRiskyImageDetector();
+        $detector = self::getService(DefaultRiskyImageDetector::class);
         $longString = str_repeat('a', 10000); // 生成一个非常长的字符串
-        $this->assertFalse($detector->isRiskyImage($longString));
+        self::assertFalse($detector->isRiskyImage($longString));
     }
 }
