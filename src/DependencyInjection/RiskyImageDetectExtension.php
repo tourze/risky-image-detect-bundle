@@ -4,7 +4,7 @@ namespace Tourze\RiskyImageDetectBundle\DependencyInjection;
 
 use Tourze\SymfonyDependencyServiceLoader\AutoExtension;
 
-class RiskyImageDetectExtension extends AutoExtension
+final class RiskyImageDetectExtension extends AutoExtension
 {
     protected function getConfigDir(): string
     {
